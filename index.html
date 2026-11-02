@@ -16,7 +16,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -32,8 +32,9 @@
     --btn-ink: #FAFBFC;
     --serif: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
     --sans: "Public Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
-    --measure: 42rem;
-    --wide: 64rem;
+    --display: "Manrope", "Public Sans", "Segoe UI", system-ui, sans-serif;
+    --measure: 60rem;
+    --wide: 72rem;
     color-scheme: light;
   }
 
@@ -58,27 +59,28 @@
   .wrap-wide { width: min(100% - 2.5rem, var(--wide)); margin-inline: auto; }
 
   /* Hero */
-  .hero { text-align: center; padding: 3.5rem 0 1.5rem; }
+  .hero { text-align: center; padding: 2.5rem 0 1.25rem; }
   .name {
-    font-size: clamp(3rem, 9vw, 5.25rem);
-    font-weight: 700;
-    letter-spacing: .14em;
+    font-family: var(--display);
+    font-size: clamp(2.6rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: .02em;
     line-height: 1;
-    margin: 0 0 1rem;
-    padding-left: .14em; /* balances trailing letter spacing */
+    margin: 0 0 .6rem;
   }
   .subtitle {
-    font-size: clamp(1.25rem, 2.6vw, 1.6rem);
-    font-weight: 400;
+    font-family: var(--display);
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    font-weight: 500;
     line-height: 1.3;
-    margin: 0 auto 1.75rem;
-    max-width: 42ch;
+    margin: 0 auto 1.25rem;
+    max-width: 48ch;
     text-wrap: balance;
   }
   .authors { font-size: 1.15rem; margin: 0 0 .25rem; }
   .authors span + span::before { content: ", "; }
   .affil { color: var(--muted); margin: 0 0 .25rem; }
-  .venue { font-family: var(--sans); font-size: .95rem; color: var(--muted); margin: 0 0 2rem; }
+  .venue { font-family: var(--sans); font-size: .95rem; color: var(--muted); margin: 0 0 1.25rem; }
 
   .links { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
   .btn {
@@ -97,17 +99,17 @@
   .btn.ghost:hover { box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--accent); }
 
   /* Teaser */
-  .teaser { margin: 1rem auto 2.5rem; }
-  .teaser .frame { background: var(--panel); border-radius: 4px; overflow: hidden; }
-  figcaption { font-family: var(--sans); font-size: .9rem; line-height: 1.5; color: var(--muted); margin: .75rem auto 0; max-width: var(--measure); }
+  .teaser { margin: .5rem auto 2.5rem; }
+  .teaser img { width: auto; max-width: 100%; max-height: max(300px, min(calc(100vh - 25rem), 640px)); margin-inline: auto; border-radius: 4px; }
+  figcaption { font-family: var(--sans); font-size: .9rem; line-height: 1.5; color: var(--muted); margin: .75rem auto 0; max-width: 46rem; text-align: center; }
   .ph { display: none; min-height: 14rem; align-items: center; justify-content: center; font-family: var(--sans); font-size: .9rem; color: var(--muted); border: 1.5px dashed var(--rule); border-radius: 4px; padding: 1rem; text-align: center; }
   figure.is-missing img { display: none; }
   figure.is-missing .ph { display: flex; }
 
   /* Sections */
   section { padding: 2.75rem 0; border-top: 1px solid var(--rule); }
-  h2 { font-size: 1.75rem; font-weight: 600; line-height: 1.2; margin: 0 0 1.25rem; }
-  h3 { font-size: 1.2rem; font-weight: 600; margin: 0 0 .2rem; }
+  h2 { font-family: var(--display); font-size: 1.6rem; font-weight: 700; line-height: 1.2; margin: 0 0 1.25rem; }
+  h3 { font-family: var(--display); font-size: 1.1rem; font-weight: 700; margin: 0 0 .2rem; }
   p { margin: 0 0 1rem; }
   .abstract p { hyphens: auto; }
 
@@ -188,7 +190,7 @@
   <nav class="links" aria-label="Paper resources">
     <!-- EDIT: replace href="#" with the OpenReview or arXiv link -->
     <a class="btn" href="#">Paper</a>
-    <a class="btn" href="https://cvi2.uni.lu/eclipse/">Dataset</a>
+    <a class="btn" href="https://huggingface.co/datasets/CVI2-UniLU/ECLIPSE">Dataset</a>
     <a class="btn" href="https://gitlab.com/uniluxembourg/snt/cvi2/open/space/eclipse">Code</a>
     <!-- EDIT: replace href="#" with the model weights link -->
     <a class="btn" href="#">Model weights</a>
@@ -201,9 +203,7 @@
 <main>
 
   <figure class="wrap-wide teaser">
-    <div class="frame">
-      <img src="static/images/teaser.png" alt="Synthetic renders of the Proba-2 satellite next to real laboratory captures of the same mockup under lighting conditions L1 to L4, which become progressively darker." onerror="this.closest('figure').classList.add('is-missing')">
-    </div>
+      <img src="static/images/teaser.png" fetchpriority="high" decoding="async" alt="Synthetic renders of the Proba-2 satellite next to real laboratory captures of the same mockup under lighting conditions L1 to L4, which become progressively darker." onerror="this.closest('figure').classList.add('is-missing')">
     <div class="ph">Add Figure 1 at static/images/teaser.png</div>
     <figcaption>Two axes of domain shift in ECLIPSE. The sim-to-real gap separates synthetic renders from all real captures. Within the real domain, appearance changes progressively from frontal lighting (L1) to near-eclipse backlighting (L4).</figcaption>
   </figure>
@@ -302,7 +302,7 @@
           <h3>Dataset</h3>
           <p>Synthetic and real splits with pose annotations.</p>
         </div>
-        <a class="btn" href="https://cvi2.uni.lu/eclipse/">Download the dataset</a>
+        <a class="btn" href="https://huggingface.co/datasets/CVI2-UniLU/ECLIPSE">Open on Hugging Face</a>
       </li>
       <li>
         <div>
@@ -340,7 +340,7 @@
 
   <section class="wrap" aria-labelledby="ack-h">
     <h2 id="ack-h">Acknowledgements</h2>
-    <p>This work was funded by the Luxembourg National Research Fund (FNR) under the project reference BRIDGES/2025/IS/19855391/U-ADAPT. Experiments were performed on the Luxembourg national supercomputer MeluXina at LuxProvide.</p>
+    <p>This work was supported by the Luxembourg National Research Fund (FNR) under the project reference BRIDGES/2025/IS/19855391/U-ADAPT, and by Infinite Orbits. Experiments were performed on the Luxembourg national supercomputer MeluXina at LuxProvide.</p>
   </section>
 
 </main>
