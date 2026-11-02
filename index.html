@@ -1,329 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ECLIPSE: A Spacecraft Rendezvous Trajectories Dataset with Controlled In-Orbit Lighting Conditions</title>
-<meta name="description" content="ECLIPSE: a spacecraft pose estimation dataset where real approach trajectories are replayed under four controlled lighting conditions. NeurIPS 2026, Track on Evaluations and Datasets.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ECLIPSE: a spacecraft pose estimation dataset where real approach trajectories are replayed under four controlled lighting conditions. NeurIPS 2026, Track on Evaluations and Datasets.">
+  <meta name="keywords" content="ECLIPSE, spacecraft pose estimation, dataset, domain adaptation, sim-to-real, illumination, NeurIPS 2026">
+  <title>ECLIPSE: A Spacecraft Rendezvous Trajectories Dataset with Controlled In-Orbit Lighting Conditions</title>
 
-<!-- Social previews: put a 1200x630 image at static/images/social.png -->
-<meta property="og:title" content="ECLIPSE: Spacecraft Pose Dataset with Controlled In-Orbit Lighting">
-<meta property="og:description" content="Real approach trajectories replayed under four controlled lighting conditions, paired with a large synthetic set. NeurIPS 2026.">
-<meta property="og:image" content="static/images/social.png">
-<meta name="twitter:card" content="summary_large_image">
+  <!-- Social previews: put a 1200x630 image at static/images/social.png -->
+  <meta property="og:title" content="ECLIPSE: Spacecraft Pose Dataset with Controlled In-Orbit Lighting">
+  <meta property="og:description" content="Real approach trajectories replayed under four controlled lighting conditions, paired with a large synthetic set. NeurIPS 2026.">
+  <meta property="og:image" content="static/images/social.png">
+  <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛰️</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='24' y='22' width='16' height='20' rx='2' fill='%23363636'/><rect x='4' y='27' width='17' height='10' rx='1' fill='%232b3654'/><rect x='43' y='27' width='17' height='10' rx='1' fill='%232b3654'/><circle cx='52' cy='12' r='6' fill='%23e7b23a'/></svg>">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
 
-<style>
-  :root {
-    --bg: #FAFBFC;
-    --panel: #EEF1F5;
-    --ink: #141A2E;
-    --muted: #545D72;
-    --rule: #D9DEE7;
-    --accent: #9A6A0E;
-    --lit: #E7B23A;
-    --shade: #59627A;
-    --btn-bg: #141A2E;
-    --btn-ink: #FAFBFC;
-    --serif: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
-    --sans: "Public Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
-    --display: "Manrope", "Public Sans", "Segoe UI", system-ui, sans-serif;
-    --measure: 60rem;
-    --wide: 72rem;
-    color-scheme: light;
-  }
+  <style>
+    [hidden] { display: none !important; }
+    .ico { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.15em; }
+    .ico.solid { fill: currentColor; stroke: none; }
+    body { font-family: 'Noto Sans', sans-serif; color: #2b2b2b; }
+    .publication-title, .publication-authors, .title, .navbar-item { font-family: 'Google Sans', 'Noto Sans', sans-serif; }
+    .publication-title { line-height: 1.25 !important; }
+    .publication-title .name { font-weight: 700; }
+    .publication-authors a { color: hsl(204, 86%, 53%) !important; }
+    .publication-authors a:hover { text-decoration: underline; }
+    .author-block { display: inline-block; }
+    .author-block:not(:last-child)::after { content: ","; margin-right: .35em; }
+    .publication-venue { display: inline-block; margin-top: .6rem; padding: .3rem .9rem; border-radius: 999px; background: #f2f4f7; color: #4a4a4a; font-weight: 600; font-size: .95rem; }
+    .publication-links { margin-top: 1.25rem; }
+    .link-block a { margin: 5px 2px; }
+    .button.is-dark { background-color: #363636; }
+    .button.is-dark:hover { background-color: #1f1f1f; }
 
-  *, *::before, *::after { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--serif);
-    font-size: 1.125rem;
-    line-height: 1.65;
-    font-optical-sizing: auto;
-  }
-  img { max-width: 100%; height: auto; display: block; }
+    /* Simple top bar with section anchors */
+    .topbar { border-bottom: 1px solid #eee; }
+    .topbar .container { display: flex; justify-content: center; flex-wrap: wrap; gap: .25rem 1.75rem; padding: .7rem 1rem; }
+    .topbar a { color: #4a4a4a; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: .95rem; }
+    .topbar a:hover { color: hsl(204, 86%, 53%); }
 
-  a { color: inherit; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
-  a:hover { color: var(--accent); }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+    .hero.intro .hero-body { padding: 2rem 1.5rem 1.5rem; }
+    .hero.teaser .hero-body { padding-top: 0; padding-bottom: 2rem; }
+    .teaser img { display: block; margin: 0 auto; width: auto; max-width: 100%; max-height: max(300px, min(calc(100vh - 28rem), 620px)); border-radius: 8px; }
+    .teaser .subtitle { margin: 1rem auto 0; max-width: 52rem; font-size: 1.05rem; color: #4a4a4a; }
+    .ph { display: none; min-height: 14rem; align-items: center; justify-content: center; color: #7a7a7a; border: 2px dashed #ddd; border-radius: 8px; }
+    .is-missing img { display: none; }
+    .is-missing .ph { display: flex; }
 
-  .wrap { width: min(100% - 2.5rem, var(--measure)); margin-inline: auto; }
-  .wrap-wide { width: min(100% - 2.5rem, var(--wide)); margin-inline: auto; }
+    .section.alt { background: #fafafa; }
+    .section .title.is-3 { margin-bottom: 1.5rem; }
 
-  /* Hero */
-  .hero { text-align: center; padding: 2.5rem 0 1.25rem; }
-  .name {
-    font-family: var(--display);
-    font-size: clamp(2.6rem, 6vw, 4rem);
-    font-weight: 800;
-    letter-spacing: .02em;
-    line-height: 1;
-    margin: 0 0 .6rem;
-  }
-  .subtitle {
-    font-family: var(--display);
-    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-    font-weight: 500;
-    line-height: 1.3;
-    margin: 0 auto 1.25rem;
-    max-width: 48ch;
-    text-wrap: balance;
-  }
-  .authors { font-size: 1.15rem; margin: 0 0 .25rem; }
-  .authors span + span::before { content: ", "; }
-  .affil { color: var(--muted); margin: 0 0 .25rem; }
-  .venue { font-family: var(--sans); font-size: .95rem; color: var(--muted); margin: 0 0 1.25rem; }
+    /* Lighting demo */
+    .scene { width: 100%; max-width: 360px; display: block; margin: 0 auto; }
+    .scene text { font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 11px; fill: #6b6b6b; }
+    .scene .lbl { font-weight: 700; fill: #2b2b2b; text-anchor: middle; dominant-baseline: middle; }
+    .scene .face { stroke: #5a6275; stroke-width: 5; stroke-linecap: square; transition: stroke .5s ease; }
+    .scene .face.on { stroke: #e7b23a; }
+    .scene .tick { fill: #dcdfe5; transition: fill .4s ease; }
+    .scene .tick.on { fill: #e7b23a; }
+    .orbit { transform-origin: 160px 112px; transition: transform .9s cubic-bezier(.45,.05,.35,1); }
+    .light-photo img { width: 100%; max-width: 420px; margin: 0 auto; display: block; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; background: #0a0a0a; }
+    .light-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; margin-top: 1.5rem; }
+    .step { display: flex; flex-direction: column; align-items: flex-start; gap: .15rem; text-align: left; cursor: pointer;
+            background: #fff; border: 1px solid #e3e3e3; border-top: 4px solid #e3e3e3; border-radius: 8px; padding: .8rem 1rem; font: inherit; color: inherit;
+            transition: border-color .3s ease, box-shadow .3s ease; }
+    .step:hover { border-color: #c9c9c9; }
+    .step[aria-pressed="true"] { border-color: #363636; border-top-color: #e7b23a; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+    .step-id { font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 700; font-size: 1.25rem; line-height: 1.1; }
+    .step-name { font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: .95rem; }
+    .step-note { font-size: .85rem; color: #6b6b6b; }
+    .difficulty { margin-top: 1.25rem; }
+    .difficulty .bar { position: relative; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #f6d58a 0%, #c9a24a 35%, #5a6275 70%, #23283a 100%); }
+    .difficulty .marker { position: absolute; top: -5px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: #fff; border: 3px solid #363636; transition: left .9s cubic-bezier(.45,.05,.35,1); }
+    .difficulty .ends { display: flex; justify-content: space-between; margin-top: .5rem; font-size: .85rem; color: #6b6b6b; }
+    @media (max-width: 768px) { .light-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (prefers-reduced-motion: reduce) { .orbit, .scene .face, .scene .tick, .difficulty .marker { transition: none; } }
 
-  .links { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
-  .btn {
-    font-family: var(--sans);
-    font-size: .95rem;
-    font-weight: 500;
-    display: inline-block;
-    padding: .55rem 1.1rem;
-    border-radius: 6px;
-    background: var(--btn-bg);
-    color: var(--btn-ink);
-    text-decoration: none;
-  }
-  .btn:hover { background: var(--accent); color: var(--btn-ink); }
-  .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--rule); }
-  .btn.ghost:hover { box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--accent); }
+    /* Resource cards */
+    .resource { height: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: none; border: 1px solid #ececec; }
+    .resource .resource-icon { font-size: 2rem; height: 2.5rem; margin-bottom: .5rem; color: #363636; }
+    .resource p { color: #6b6b6b; flex: 1; margin-bottom: 1rem; }
 
-  /* Teaser */
-  .teaser { margin: .5rem auto 2.5rem; }
-  .teaser img { width: auto; max-width: 100%; max-height: max(300px, min(calc(100vh - 25rem), 640px)); margin-inline: auto; border-radius: 4px; }
-  figcaption { font-family: var(--sans); font-size: .9rem; line-height: 1.5; color: var(--muted); margin: .75rem auto 0; max-width: 46rem; text-align: center; }
-  .ph { display: none; min-height: 14rem; align-items: center; justify-content: center; font-family: var(--sans); font-size: .9rem; color: var(--muted); border: 1.5px dashed var(--rule); border-radius: 4px; padding: 1rem; text-align: center; }
-  figure.is-missing img { display: none; }
-  figure.is-missing .ph { display: flex; }
+    /* Acknowledgement logos */
+    .logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2.5rem; margin-top: 1.5rem; }
+    .logos img { height: 52px; width: auto; }
 
-  /* Sections */
-  section { padding: 2.75rem 0; border-top: 1px solid var(--rule); }
-  h2 { font-family: var(--display); font-size: 1.6rem; font-weight: 700; line-height: 1.2; margin: 0 0 1.25rem; }
-  h3 { font-family: var(--display); font-size: 1.1rem; font-weight: 700; margin: 0 0 .2rem; }
-  p { margin: 0 0 1rem; }
-  .abstract p { hyphens: auto; }
+    /* BibTeX */
+    .bib { position: relative; }
+    .bib pre { background: #f5f5f5; border-radius: 8px; padding: 1.25rem 6rem 1.25rem 1.25rem; font-size: .85rem; }
+    .bib .copy { position: absolute; top: .6rem; right: .6rem; }
 
-  /* Lighting demo */
-  .light-demo { display: grid; gap: 1.5rem 2.5rem; align-items: center; margin-top: 1.5rem; }
-  @media (min-width: 46rem) { .light-demo { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
-  .scene { width: 100%; max-width: 22rem; margin-inline: auto; display: block; }
-  .scene text { font-family: var(--sans); font-size: 11px; fill: var(--muted); }
-  .scene .lbl { font-weight: 600; fill: var(--ink); text-anchor: middle; dominant-baseline: middle; }
-  .scene .face { stroke: var(--shade); stroke-width: 5; stroke-linecap: square; transition: stroke .5s ease; }
-  .scene .face.on { stroke: var(--lit); }
-  .scene .tick { fill: var(--rule); transition: fill .4s ease; }
-  .scene .tick.on { fill: var(--lit); }
-  .orbit { transform-origin: 160px 112px; transition: transform .9s cubic-bezier(.45,.05,.35,1); }
+    .video-wrap { position: relative; width: 100%; padding-bottom: 56.25%; border-radius: 10px; overflow: hidden; }
+    .video-wrap iframe, .video-wrap video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-  .seg { display: inline-flex; border-radius: 6px; box-shadow: inset 0 0 0 1.5px var(--rule); padding: 3px; gap: 3px; margin-bottom: 1rem; }
-  .seg button {
-    font-family: var(--sans); font-size: .95rem; font-weight: 600;
-    border: 0; background: transparent; color: var(--muted);
-    padding: .4rem .95rem; border-radius: 4px; cursor: pointer;
-  }
-  .seg button:hover { color: var(--ink); }
-  .seg button[aria-pressed="true"] { background: var(--btn-bg); color: var(--btn-ink); }
-  .light-photo { margin: 0 0 1rem; }
-  .light-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; background: #0A0A0A; }
-  .light-desc { min-height: 3.4em; margin: 0; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .orbit, .scene .face, .scene .tick { transition: none; }
-  }
-
-  /* Resources */
-  .resources { list-style: none; padding: 0; margin: 0; }
-  .resources li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1.5rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); }
-  .resources li:first-child { padding-top: 0; }
-  .resources div { flex: 1 1 20rem; }
-  .resources p { margin: 0; color: var(--muted); font-size: 1rem; }
-
-  /* Video */
-  .video { position: relative; aspect-ratio: 16 / 9; background: var(--panel); border-radius: 4px; overflow: hidden; }
-  .video iframe, .video video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-
-  /* Citation */
-  .bib { position: relative; }
-  pre {
-    background: var(--panel);
-    border-radius: 4px;
-    padding: 1.1rem 1.25rem;
-    padding-right: 5.5rem;
-    overflow-x: auto;
-    font-size: .85rem;
-    line-height: 1.55;
-    margin: 0;
-  }
-  .copy { position: absolute; top: .6rem; right: .6rem; font-size: .85rem; padding: .35rem .8rem; border: 0; cursor: pointer; }
-
-  footer { border-top: 1px solid var(--rule); padding: 2rem 0 3rem; font-family: var(--sans); font-size: .85rem; color: var(--muted); text-align: center; }
-
-  @media (max-width: 34rem) {
-    body { font-size: 1.05rem; }
-    .hero { padding-top: 2.5rem; }
-  }
-</style>
+    .footer { padding: 2.5rem 1.5rem 3rem; }
+    @media (max-width: 768px) {
+      .publication-title { font-size: 1.75rem !important; }
+      .topbar .container { gap: .2rem 1.1rem; }
+      .topbar a { font-size: .85rem; }
+    }
+    .footer .icon-link { font-size: 1.4rem; color: #363636; margin: 0 .6rem; }
+  </style>
 </head>
 <body>
 
-<header class="hero wrap-wide">
-  <h1 class="name">ECLIPSE</h1>
-  <p class="subtitle">A Spacecraft Rendezvous Trajectories Dataset with Controlled In-Orbit Lighting Conditions</p>
+<!-- Inline icons (no external icon library needed) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-paper" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-data" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="4"/><path d="M10 9l5 3-5 3z"/></symbol>
+  <symbol id="i-gitlab" viewBox="0 0 24 24"><path d="m23.6 9.59-.03-.09L20.3.98a.85.85 0 0 0-.34-.4.87.87 0 0 0-1 .05.87.87 0 0 0-.29.44l-2.2 6.75H7.54L5.33 1.07a.86.86 0 0 0-.29-.44.87.87 0 0 0-1-.06.86.86 0 0 0-.34.41L.43 9.5l-.03.09a6.07 6.07 0 0 0 2.01 7.01l.01.01.03.02 4.98 3.73 2.46 1.86 1.5 1.13a1.01 1.01 0 0 0 1.22 0l1.5-1.13 2.46-1.86 5.01-3.75.01-.01a6.07 6.07 0 0 0 2-7z"/></symbol>
+</svg>
 
-  <!-- To link an author, wrap the name: <span><a href="https://...">Name</a></span> -->
-  <p class="authors">
-    <span>Nidhal Eddine Chenni</span><span>Arunkumar Rathinam</span><span>Abid Ali</span><span>Djamila Aouada</span>
-  </p>
-  <p class="affil">SnT, University of Luxembourg</p>
-  <p class="venue">NeurIPS 2026, Track on Evaluations and Datasets</p>
+<nav class="topbar" aria-label="Sections">
+  <div class="container">
+    <a href="#abstract">Abstract</a>
+    <a href="#lighting">Lighting conditions</a>
+    <a href="#data">Data and code</a>
+    <a href="#BibTeX">BibTeX</a>
+  </div>
+</nav>
 
-  <nav class="links" aria-label="Paper resources">
-    <!-- EDIT: replace href="#" with the OpenReview or arXiv link -->
-    <a class="btn" href="#">Paper</a>
-    <a class="btn" href="https://huggingface.co/datasets/CVI2-UniLU/ECLIPSE">Dataset</a>
-    <a class="btn" href="https://gitlab.com/uniluxembourg/snt/cvi2/open/space/eclipse">Code</a>
-    <!-- EDIT: replace href="#" with the model weights link -->
-    <a class="btn" href="#">Model weights</a>
-    <!-- Uncomment once the video section below is enabled -->
-    <!-- <a class="btn ghost" href="#video">Video</a> -->
-    <a class="btn ghost" href="#cite">Cite</a>
-  </nav>
-</header>
+<section class="hero intro">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title"><span class="name">ECLIPSE</span>: A Spacecraft Rendezvous Trajectories Dataset with Controlled In-Orbit Lighting Conditions</h1>
 
-<main>
+          <!-- EDIT: paste each author's LinkedIn URL between the quotes, e.g. data-linkedin="https://www.linkedin.com/in/your-profile/".
+               A name with an empty value is shown as plain text. -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block" data-linkedin="https://www.linkedin.com/in/nidhaleddine-chenni/">Nidhal Eddine Chenni</span>
+            <span class="author-block" data-linkedin="https://www.linkedin.com/in/arunsz/">Arunkumar Rathinam</span>
+            <span class="author-block" data-linkedin="https://www.linkedin.com/in/abid-ali-9404/">Abid Ali</span>
+            <span class="author-block" data-linkedin="https://www.linkedin.com/in/djamilaaouada/">Djamila Aouada</span>
+          </div>
+          <div class="is-size-6 publication-authors" style="margin-top:.35rem">
+            <span class="author-block">Interdisciplinary Centre for Security, Reliability and Trust (SnT), University of Luxembourg</span>
+          </div>
+          <div class="publication-venue">NeurIPS 2026, Track on Evaluations and Datasets</div>
 
-  <figure class="wrap-wide teaser">
-      <img src="static/images/teaser.png" fetchpriority="high" decoding="async" alt="Synthetic renders of the Proba-2 satellite next to real laboratory captures of the same mockup under lighting conditions L1 to L4, which become progressively darker." onerror="this.closest('figure').classList.add('is-missing')">
-    <div class="ph">Add Figure 1 at static/images/teaser.png</div>
-    <figcaption>Two axes of domain shift in ECLIPSE. The sim-to-real gap separates synthetic renders from all real captures. Within the real domain, appearance changes progressively from frontal lighting (L1) to near-eclipse backlighting (L4).</figcaption>
-  </figure>
-
-  <section class="wrap abstract" aria-labelledby="abstract-h">
-    <h2 id="abstract-h">Abstract</h2>
-    <p>Deep learning has become the dominant paradigm for vision-based spacecraft pose estimation, where models are predominantly trained on synthetic data due to the prohibitive cost of acquiring real in-orbit imagery. When deployed, these models suffer significant performance degradation due to the sim-to-real domain gap, which existing benchmarks address by pairing synthetic training data with Hardware-in-the-Loop (HIL) real imagery. Yet a critical factor remains consistently overlooked: in real orbital scenarios, illumination varies with the spacecraft's position along its orbit, inducing severe appearance shifts that existing benchmarks neither control nor study. We introduce ECLIPSE, the first benchmark designed to isolate illumination as an independent experimental variable. ECLIPSE pairs a large-scale photorealistic synthetic training set with a fully labeled HIL evaluation set of 14 approach trajectories, each replayed identically under 4 controlled lighting conditions, enabling rigorous evaluation of illumination-robust and domain-adaptation methods. Through this controlled design, our experiments confirm that illumination is a major driver of performance degradation in spacecraft pose estimation, both within the real domain and across the sim-to-real gap.</p>
-  </section>
-
-  <section class="wrap" aria-labelledby="light-h">
-    <h2 id="light-h">Four lighting conditions</h2>
-    <p>Each real trajectory is recorded four times with the same motion, once per lamp position. Only the lighting changes.</p>
-
-    <div class="light-demo">
-      <!-- Top view schematic: camera at the bottom, target in the middle, lamp moving around it. Gold faces are lit. -->
-      <svg class="scene" viewBox="0 -12 320 262" role="img" aria-labelledby="scene-title">
-        <title id="scene-title">Top view of the setup: the lamp moves around the target from the camera side (L1) to behind the target (L4).</title>
-
-        <path d="M160 194 A82 82 0 0 0 174.2 31.2" fill="none" stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="3 5"/>
-        <circle class="tick" data-i="0" cx="177" cy="192.2" r="3.5"/>
-        <circle class="tick" data-i="1" cx="218" cy="170" r="3.5"/>
-        <circle class="tick" data-i="2" cx="240.8" cy="97.8" r="3.5"/>
-        <circle class="tick" data-i="3" cx="188" cy="35" r="3.5"/>
-        <text class="lbl" x="186" y="222">L1</text>
-        <text class="lbl" x="240" y="192">L2</text>
-        <text class="lbl" x="271" y="93">L3</text>
-        <text class="lbl" x="199" y="5">L4</text>
-
-        <!-- light beam, rotates with the lamp -->
-        <g class="orbit" id="beam">
-          <polygon points="160,194 128,112 192,112" fill="var(--lit)" opacity=".22"/>
-        </g>
-
-        <!-- camera and line of sight -->
-        <line x1="160" y1="216" x2="160" y2="136" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="4 4"/>
-        <rect x="155" y="216" width="10" height="6" rx="1" fill="var(--ink)"/>
-        <rect x="147" y="222" width="26" height="15" rx="2.5" fill="var(--ink)"/>
-        <text x="141" y="234" text-anchor="end">camera</text>
-
-        <!-- target: solar panels and body -->
-        <line x1="136" y1="112" x2="140" y2="112" stroke="var(--ink)" stroke-width="2"/>
-        <line x1="180" y1="112" x2="184" y2="112" stroke="var(--ink)" stroke-width="2"/>
-        <rect x="96" y="106" width="40" height="12" rx="1" fill="#2B3654"/>
-        <rect x="184" y="106" width="40" height="12" rx="1" fill="#2B3654"/>
-        <path d="M106 106v12M116 106v12M126 106v12M194 106v12M204 106v12M214 106v12" stroke="#8C98B8" stroke-width="1"/>
-        <rect x="140" y="92" width="40" height="40" fill="#E9ECF1"/>
-        <line class="face" data-n="0,1"  x1="140" y1="132" x2="180" y2="132"/>
-        <line class="face" data-n="1,0"  x1="180" y1="92"  x2="180" y2="132"/>
-        <line class="face" data-n="0,-1" x1="140" y1="92"  x2="180" y2="92"/>
-        <line class="face" data-n="-1,0" x1="140" y1="92"  x2="140" y2="132"/>
-
-        <!-- lamp, rotates around the target -->
-        <g class="orbit" id="lamp">
-          <g stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round">
-            <path d="M160 180v-4M160 208v4M146 194h-4M174 194h4M150 184l-3-3M170 184l3-3M150 204l-3 3M170 204l3 3"/>
-          </g>
-          <circle cx="160" cy="194" r="8" fill="var(--lit)" stroke="var(--accent)" stroke-width="1.5"/>
-        </g>
-      </svg>
-
-      <div>
-        <div class="seg" role="group" aria-label="Lighting condition">
-          <button type="button" data-i="0" aria-pressed="true">L1</button>
-          <button type="button" data-i="1" aria-pressed="false">L2</button>
-          <button type="button" data-i="2" aria-pressed="false">L3</button>
-          <button type="button" data-i="3" aria-pressed="false">L4</button>
+          <div class="publication-links">
+            <!-- EDIT: replace href="#" with the paper PDF or OpenReview link -->
+            <span class="link-block">
+              <a href="#" class="button is-normal is-rounded is-dark">
+                <span class="icon"><svg class="ico" aria-hidden="true"><use href="#i-paper"/></svg></span><span>Paper</span>
+              </a>
+            </span>
+            <!-- Uncomment when the arXiv version is online
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/XXXX.XXXXX" class="button is-normal is-rounded is-dark">
+                <span class="icon"><svg class="ico" aria-hidden="true"><use href="#i-paper"/></svg></span><span>arXiv</span>
+              </a>
+            </span> -->
+            <span class="link-block">
+              <a href="https://huggingface.co/datasets/CVI2-UniLU/ECLIPSE" class="button is-normal is-rounded is-dark">
+                <span class="icon"><svg class="ico" aria-hidden="true"><use href="#i-data"/></svg></span><span>Dataset</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://gitlab.com/uniluxembourg/snt/cvi2/open/space/eclipse" class="button is-normal is-rounded is-dark">
+                <span class="icon"><svg class="ico solid" aria-hidden="true"><use href="#i-gitlab"/></svg></span><span>Code</span>
+              </a>
+            </span>
+            <!-- EDIT: replace href="#" with the model weights link -->
+            <span class="link-block">
+              <a href="#" class="button is-normal is-rounded is-dark">
+                <span class="icon"><svg class="ico" aria-hidden="true"><use href="#i-box"/></svg></span><span>Weights</span>
+              </a>
+            </span>
+            <!-- Uncomment once the video section below is enabled
+            <span class="link-block">
+              <a href="#video" class="button is-normal is-rounded is-dark">
+                <span class="icon"><svg class="ico" aria-hidden="true"><use href="#i-play"/></svg></span><span>Video</span>
+              </a>
+            </span> -->
+          </div>
         </div>
-        <!-- Optional: one real crop per condition, same pose, at static/images/l1.png ... l4.png -->
-        <figure class="light-photo" id="light-photo">
-          <img id="light-img" src="static/images/l1.png" alt="Real capture of the mockup under lighting condition L1" onerror="this.closest('figure').hidden = true">
-        </figure>
-        <p class="light-desc" id="light-desc" aria-live="polite"></p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!--
-    VIDEO: remove the "hidden" attribute below and keep ONE of the two options.
-    Option A, YouTube: replace VIDEO_ID with the id from the YouTube link.
-    Option B, local file: put the video at static/videos/eclipse.mp4 (keep it under ~50 MB for GitHub).
-    Then uncomment the Video button in the header.
-  -->
-  <section id="video" class="wrap" aria-labelledby="video-h" hidden>
-    <h2 id="video-h">Video</h2>
-    <div class="video">
-      <iframe src="https://www.youtube-nocookie.com/embed/VIDEO_ID" title="ECLIPSE video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-      <!-- <video controls preload="metadata" poster="static/images/teaser.png"><source src="static/videos/eclipse.mp4" type="video/mp4"></video> -->
+<section class="hero teaser">
+  <div class="container is-max-widescreen">
+    <div class="hero-body">
+      <figure id="teaser-fig">
+        <img src="static/images/teaser.png" fetchpriority="high" decoding="async" alt="Synthetic renders of the Proba-2 satellite next to real laboratory captures of the same mockup under lighting conditions L1 to L4, which become progressively darker." onerror="document.getElementById('teaser-fig').classList.add('is-missing')">
+        <div class="ph">Add Figure 1 at static/images/teaser.png</div>
+      </figure>
+      <h2 class="subtitle has-text-centered">
+        Two axes of domain shift in ECLIPSE: the sim-to-real gap between synthetic and real images, and the illumination gap within the real domain, from frontal lighting (L1) to near-eclipse backlighting (L4).
+      </h2>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="wrap" aria-labelledby="get-h">
-    <h2 id="get-h">Data and code</h2>
-    <ul class="resources">
-      <li>
-        <div>
-          <h3>Dataset</h3>
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>Deep learning has become the dominant paradigm for vision-based spacecraft pose estimation, where models are predominantly trained on synthetic data due to the prohibitive cost of acquiring real in-orbit imagery. When deployed, these models suffer significant performance degradation due to the sim-to-real domain gap, which existing benchmarks address by pairing synthetic training data with Hardware-in-the-Loop (HIL) real imagery. Yet a critical factor remains consistently overlooked: in real orbital scenarios, illumination varies with the spacecraft's position along its orbit, inducing severe appearance shifts that existing benchmarks neither control nor study.</p>
+          <p>We introduce ECLIPSE, the first benchmark designed to isolate illumination as an independent experimental variable. ECLIPSE pairs a large-scale photorealistic synthetic training set with a fully labeled HIL evaluation set of 14 approach trajectories, each replayed identically under 4 controlled lighting conditions, enabling rigorous evaluation of illumination-robust and domain-adaptation methods. Through this controlled design, our experiments confirm that illumination is a major driver of performance degradation in spacecraft pose estimation, both within the real domain and across the sim-to-real gap.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--
+  VIDEO: remove the "hidden" attribute below and keep ONE of the two options.
+  Option A, YouTube: replace VIDEO_ID with the id from the YouTube link.
+  Option B, local file: put the video at static/videos/eclipse.mp4 (keep it under ~50 MB for GitHub).
+  Then uncomment the Video button in the header.
+-->
+<section class="section" id="video" hidden>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="video-wrap">
+          <iframe src="https://www.youtube-nocookie.com/embed/VIDEO_ID" title="ECLIPSE video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <!-- <video controls preload="metadata" poster="static/images/teaser.png"><source src="static/videos/eclipse.mp4" type="video/mp4"></video> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="lighting">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Four Controlled Lighting Conditions</h2>
+    <p class="has-text-centered" style="max-width:40rem;margin:0 auto 2rem">Each real trajectory is recorded four times with the same motion, once per lamp position, so only the lighting changes.</p>
+
+    <div class="columns is-vcentered is-centered">
+      <div class="column is-half">
+        <!-- Top view schematic: camera at the bottom, target in the middle, lamp moving around it. Gold faces are lit. -->
+        <svg class="scene" viewBox="0 -12 320 262" role="img" aria-labelledby="scene-title">
+          <title id="scene-title">Top view of the setup: the lamp moves around the target from the camera side (L1) to behind the target (L4).</title>
+          <path d="M160 194 A82 82 0 0 0 174.2 31.2" fill="none" stroke="#dcdfe5" stroke-width="1.5" stroke-dasharray="3 5"/>
+          <circle class="tick" data-i="0" cx="177" cy="192.2" r="3.5"/>
+          <circle class="tick" data-i="1" cx="218" cy="170" r="3.5"/>
+          <circle class="tick" data-i="2" cx="240.8" cy="97.8" r="3.5"/>
+          <circle class="tick" data-i="3" cx="188" cy="35" r="3.5"/>
+          <text class="lbl" x="186" y="222">L1</text>
+          <text class="lbl" x="240" y="192">L2</text>
+          <text class="lbl" x="271" y="93">L3</text>
+          <text class="lbl" x="199" y="5">L4</text>
+
+          <g class="orbit"><polygon points="160,194 128,112 192,112" fill="#e7b23a" opacity=".22"/></g>
+
+          <line x1="160" y1="216" x2="160" y2="136" stroke="#8a8a8a" stroke-width="1.2" stroke-dasharray="4 4"/>
+          <rect x="155" y="216" width="10" height="6" rx="1" fill="#363636"/>
+          <rect x="147" y="222" width="26" height="15" rx="2.5" fill="#363636"/>
+          <text x="141" y="234" text-anchor="end">camera</text>
+
+          <line x1="136" y1="112" x2="140" y2="112" stroke="#363636" stroke-width="2"/>
+          <line x1="180" y1="112" x2="184" y2="112" stroke="#363636" stroke-width="2"/>
+          <rect x="96" y="106" width="40" height="12" rx="1" fill="#2b3654"/>
+          <rect x="184" y="106" width="40" height="12" rx="1" fill="#2b3654"/>
+          <path d="M106 106v12M116 106v12M126 106v12M194 106v12M204 106v12M214 106v12" stroke="#8c98b8" stroke-width="1"/>
+          <rect x="140" y="92" width="40" height="40" fill="#e9ecf1"/>
+          <line class="face" data-n="0,1"  x1="140" y1="132" x2="180" y2="132"/>
+          <line class="face" data-n="1,0"  x1="180" y1="92"  x2="180" y2="132"/>
+          <line class="face" data-n="0,-1" x1="140" y1="92"  x2="180" y2="92"/>
+          <line class="face" data-n="-1,0" x1="140" y1="92"  x2="140" y2="132"/>
+
+          <g class="orbit">
+            <path d="M160 180v-4M160 208v4M146 194h-4M174 194h4M150 184l-3-3M170 184l3-3M150 204l-3 3M170 204l3 3" stroke="#9a6a0e" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="160" cy="194" r="8" fill="#e7b23a" stroke="#9a6a0e" stroke-width="1.5"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="column is-half" id="photo-col">
+        <!-- Optional: one real crop per condition, same pose, at static/images/l1.png ... l4.png -->
+        <figure class="light-photo">
+          <img id="light-img" src="static/images/l1.png" alt="Real capture of the mockup under lighting condition L1" onerror="document.getElementById('photo-col').hidden = true">
+        </figure>
+      </div>
+    </div>
+
+    <div class="light-steps" role="group" aria-label="Lighting condition">
+      <button type="button" class="step" data-i="0" aria-pressed="true"><span class="step-id">L1</span><span class="step-name">Frontal light</span><span class="step-note">Visible faces fully lit</span></button>
+      <button type="button" class="step" data-i="1" aria-pressed="false"><span class="step-id">L2</span><span class="step-name">Oblique light</span><span class="step-note">Shadows start to appear</span></button>
+      <button type="button" class="step" data-i="2" aria-pressed="false"><span class="step-id">L3</span><span class="step-name">Grazing light</span><span class="step-note">Long shadows, edge highlights</span></button>
+      <button type="button" class="step" data-i="3" aria-pressed="false"><span class="step-id">L4</span><span class="step-name">Back light</span><span class="step-note">Target mostly in shadow</span></button>
+    </div>
+    <div class="difficulty" aria-hidden="true">
+      <div class="bar"><span class="marker" id="marker" style="left:12.5%"></span></div>
+      <div class="ends"><span>Most favourable for pose estimation</span><span>Worst case</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="data">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Data and Code</h2>
+    <div class="columns">
+      <div class="column">
+        <div class="box resource">
+          <div class="resource-icon"><svg class="ico" aria-hidden="true"><use href="#i-data"/></svg></div>
+          <h3 class="title is-5">Dataset</h3>
           <p>Synthetic and real splits with pose annotations.</p>
+          <a class="button is-dark is-rounded" href="https://huggingface.co/datasets/CVI2-UniLU/ECLIPSE">Hugging Face</a>
         </div>
-        <a class="btn" href="https://huggingface.co/datasets/CVI2-UniLU/ECLIPSE">Open on Hugging Face</a>
-      </li>
-      <li>
-        <div>
-          <h3>Code</h3>
+      </div>
+      <div class="column">
+        <div class="box resource">
+          <div class="resource-icon"><svg class="ico solid" aria-hidden="true"><use href="#i-gitlab"/></svg></div>
+          <h3 class="title is-5">Code</h3>
           <p>Baseline training and evaluation code, and rendering utilities for extra labels.</p>
+          <a class="button is-dark is-rounded" href="https://gitlab.com/uniluxembourg/snt/cvi2/open/space/eclipse">GitLab</a>
         </div>
-        <a class="btn" href="https://gitlab.com/uniluxembourg/snt/cvi2/open/space/eclipse">Open the repository</a>
-      </li>
-      <li>
-        <div>
-          <h3>Model weights</h3>
+      </div>
+      <div class="column">
+        <div class="box resource">
+          <div class="resource-icon"><svg class="ico" aria-hidden="true"><use href="#i-box"/></svg></div>
+          <h3 class="title is-5">Model Weights</h3>
           <p>Trained weights for the baseline models in the paper.</p>
+          <!-- EDIT: replace href="#" with the weights link -->
+          <a class="button is-dark is-rounded" href="#">Download</a>
         </div>
-        <!-- EDIT: replace href="#" with the weights link -->
-        <a class="btn" href="#">Download the weights</a>
-      </li>
-    </ul>
-  </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <section id="cite" class="wrap" aria-labelledby="cite-h">
-    <h2 id="cite-h">Citation</h2>
+<section class="section alt" id="acknowledgements">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Acknowledgements</h2>
+        <div class="content has-text-justified">
+          <p>This work was supported by the Luxembourg National Research Fund (FNR) under the project reference BRIDGES/2025/IS/19855391/U-ADAPT, and by Infinite Orbits. Experiments were performed on the Luxembourg national supercomputer MeluXina at LuxProvide.</p>
+        </div>
+        <!-- Logos: add static/images/fnr.png and static/images/io.png (missing ones are hidden) -->
+        <div class="logos">
+          <img src="static/images/fnr.png" alt="Luxembourg National Research Fund (FNR)" onerror="this.remove()">
+          <img src="static/images/io.png" alt="Infinite Orbits" onerror="this.remove()">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
     <div class="bib">
 <pre id="bibtex"><code>@inproceedings{chenni2026eclipse,
   title     = {{ECLIPSE}: A Spacecraft Rendezvous Trajectories Dataset
@@ -334,88 +366,89 @@
                Track on Evaluations and Datasets},
   year      = {2026}
 }</code></pre>
-      <button class="btn copy" type="button" data-copy="bibtex">Copy</button>
+      <button class="button is-small is-dark is-rounded copy" type="button" data-copy="bibtex">
+        <span class="icon is-small"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg></span><span>Copy</span>
+      </button>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="wrap" aria-labelledby="ack-h">
-    <h2 id="ack-h">Acknowledgements</h2>
-    <p>This work was supported by the Luxembourg National Research Fund (FNR) under the project reference BRIDGES/2025/IS/19855391/U-ADAPT, and by Infinite Orbits. Experiments were performed on the Luxembourg national supercomputer MeluXina at LuxProvide.</p>
-  </section>
-
-</main>
-
-<footer>
-  <div class="wrap">SnT, University of Luxembourg</div>
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="https://huggingface.co/datasets/CVI2-UniLU/ECLIPSE" aria-label="Dataset"><svg class="ico" aria-hidden="true"><use href="#i-data"/></svg></a>
+      <a class="icon-link" href="https://gitlab.com/uniluxembourg/snt/cvi2/open/space/eclipse" aria-label="Code"><svg class="ico solid" aria-hidden="true"><use href="#i-gitlab"/></svg></a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered is-size-7">
+          <p>Website template adapted from <a href="https://nerfies.github.io/">Nerfies</a> (<a href="https://github.com/nerfies/nerfies.github.io">source code</a>), licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </footer>
 
 <script>
+  /* Author links */
+  document.querySelectorAll('.author-block[data-linkedin]').forEach(function (el) {
+    var url = el.dataset.linkedin.trim();
+    if (!url) return;
+    var a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = el.textContent;
+    el.textContent = ''; el.appendChild(a);
+  });
+
   /* Lighting demo */
   (function () {
     var angles = [12, 45, 100, 160]; // lamp angle from the camera axis, for the schematic only
-    var texts = [
-      'L1. The light comes from the camera side, so the visible faces are fully lit.',
-      'L2. The light moves around the target and shadows start to cover the visible faces.',
-      'L3. Shadows grow longer, with highlights on panels that face away from the camera.',
-      'L4. The light is near opposition, behind the target. Most of the visible surface is in shadow.'
-    ];
     var orbits = document.querySelectorAll('.orbit');
     var faces = document.querySelectorAll('.scene .face');
     var ticks = document.querySelectorAll('.scene .tick');
-    var buttons = document.querySelectorAll('.seg button');
+    var steps = document.querySelectorAll('.light-steps .step');
+    var marker = document.getElementById('marker');
     var img = document.getElementById('light-img');
-    var desc = document.getElementById('light-desc');
-    var current = 0, timer = null;
+    var current = 0, timer = null, userTook = false;
 
-    // preload crops so switching is instant
     for (var k = 1; k <= 4; k++) { var p = new Image(); p.src = 'static/images/l' + k + '.png'; }
 
     function show(i) {
       current = i;
-      var a = angles[i] * Math.PI / 180;
-      var dx = Math.sin(a), dy = Math.cos(a); // direction from target to lamp (screen coordinates)
+      var a = angles[i] * Math.PI / 180, dx = Math.sin(a), dy = Math.cos(a);
       orbits.forEach(function (o) { o.style.transform = 'rotate(' + (-angles[i]) + 'deg)'; });
       faces.forEach(function (f) {
         var n = f.dataset.n.split(',').map(Number);
         f.classList.toggle('on', n[0] * dx + n[1] * dy > 0.3);
       });
       ticks.forEach(function (t) { t.classList.toggle('on', +t.dataset.i === i); });
-      buttons.forEach(function (b) { b.setAttribute('aria-pressed', +b.dataset.i === i ? 'true' : 'false'); });
+      steps.forEach(function (b) { b.setAttribute('aria-pressed', +b.dataset.i === i ? 'true' : 'false'); });
+      marker.style.left = (12.5 + 25 * i) + '%';
       img.src = 'static/images/l' + (i + 1) + '.png';
       img.alt = 'Real capture of the mockup under lighting condition L' + (i + 1);
-      desc.textContent = texts[i];
     }
-
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () { stop(); show(+b.dataset.i); });
-    });
-
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
     function play() { if (!timer) timer = setInterval(function () { show((current + 1) % 4); }, 2600); }
 
+    steps.forEach(function (b) {
+      b.addEventListener('click', function () { userTook = true; stop(); show(+b.dataset.i); });
+    });
     show(0);
 
-    // Cycle through L1 to L4 while the section is on screen, until someone clicks a button.
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduce && 'IntersectionObserver' in window) {
-      var userTook = false;
-      buttons.forEach(function (b) { b.addEventListener('click', function () { userTook = true; }); });
       new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting && !userTook) play(); else stop();
-        });
-      }, { threshold: 0.5 }).observe(document.querySelector('.light-demo'));
+        entries.forEach(function (e) { if (e.isIntersecting && !userTook) play(); else stop(); });
+      }, { threshold: 0.4 }).observe(document.getElementById('lighting'));
     }
   })();
 
   /* Copy BibTeX */
   document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    var label = btn.querySelector('span:last-child');
     btn.addEventListener('click', function () {
       var text = document.getElementById(btn.dataset.copy).innerText;
-      var done = function () {
-        btn.textContent = 'Copied';
-        setTimeout(function () { btn.textContent = 'Copy'; }, 1800);
-      };
+      var done = function () { label.textContent = 'Copied'; setTimeout(function () { label.textContent = 'Copy'; }, 1800); };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(done, function () { fallback(text); done(); });
       } else { fallback(text); done(); }
